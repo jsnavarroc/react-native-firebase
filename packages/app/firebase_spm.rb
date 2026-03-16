@@ -43,20 +43,24 @@ end
 #   Can be a single string like 'Firebase/Auth' or an array like ['Firebase/Messaging', 'FirebaseCoreExtension']
 def firebase_dependency(spec, version, spm_products, pods)
   if defined?(spm_dependency) && !defined?($RNFirebaseDisableSPM)
-    Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
-      "Using SPM for Firebase dependency resolution (products: #{spm_products.join(', ')})"
+    if defined?(Pod::UI)
+      Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
+        "Using SPM for Firebase dependency resolution (products: #{spm_products.join(', ')})"
+    end
     spm_dependency(spec,
       url: $firebase_spm_url,
       requirement: { kind: 'upToNextMajorVersion', minimumVersion: version },
       products: spm_products
     )
   else
-    if defined?($RNFirebaseDisableSPM)
-      Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
-        "SPM disabled ($RNFirebaseDisableSPM = true), using CocoaPods for Firebase dependencies"
-    elsif !defined?(spm_dependency)
-      Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
-        "SPM not available (React Native < 0.75), using CocoaPods for Firebase dependencies"
+    if defined?(Pod::UI)
+      if defined?($RNFirebaseDisableSPM)
+        Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
+          "SPM disabled ($RNFirebaseDisableSPM = true), using CocoaPods for Firebase dependencies"
+      elsif !defined?(spm_dependency)
+        Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
+          "SPM not available (React Native < 0.75), using CocoaPods for Firebase dependencies"
+      end
     end
     pods = [pods] unless pods.is_a?(Array)
     pods.each do |pod|
