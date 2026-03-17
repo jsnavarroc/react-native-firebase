@@ -225,13 +225,9 @@ jobs:
         run: |
           if [[ "${{ matrix.dep-resolution }}" == "cocoapods" ]]; then
             echo "Configuring CocoaPods-only mode (disabling SPM)"
-            # Insert $RNFirebaseDisableSPM flag and switch to static linkage
             cd tests/ios
             sed -i '' "s/^linkage = 'dynamic'/linkage = 'static'/" Podfile
-            sed -i '' "/^platform :ios/i\\
-\$RNFirebaseDisableSPM = true
-" Podfile
-            # Remove SWIFT_ENABLE_EXPLICIT_MODULES override (not needed without SPM)
+            printf '%s\n' '$RNFirebaseDisableSPM = true' | cat - Podfile > Podfile.tmp && mv Podfile.tmp Podfile
             sed -i '' "/SWIFT_ENABLE_EXPLICIT_MODULES/d" Podfile
             echo "Podfile configured for CocoaPods-only mode"
           else
