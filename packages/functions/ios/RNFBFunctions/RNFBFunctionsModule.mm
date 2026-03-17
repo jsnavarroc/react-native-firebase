@@ -82,30 +82,26 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
 
 - (std::shared_ptr<facebook::react::TurboModule>)getTurboModule:
     (const facebook::react::ObjCTurboModule::InitParams &)params {
-  return std::make_shared<facebook::react::NativeRNFBTurboFunctionsSpecJSI>(
-      params);
+  return std::make_shared<facebook::react::NativeRNFBTurboFunctionsSpecJSI>(params);
 }
 
-- (void)
-    httpsCallable:(NSString *)appName
-           region:(NSString *)customUrlOrRegion
-     emulatorHost:(NSString *_Nullable)emulatorHost
-     emulatorPort:(double)emulatorPort
-             name:(NSString *)name
-             data:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableData &)data
-          options:
-              (JS::NativeRNFBTurboFunctions::SpecHttpsCallableOptions &)options
-          resolve:(RCTPromiseResolveBlock)resolve
-           reject:(RCTPromiseRejectBlock)reject {
+- (void)httpsCallable:(NSString *)appName
+               region:(NSString *)customUrlOrRegion
+         emulatorHost:(NSString *_Nullable)emulatorHost
+         emulatorPort:(double)emulatorPort
+                 name:(NSString *)name
+                 data:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableData &)data
+              options:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableOptions &)options
+              resolve:(RCTPromiseResolveBlock)resolve
+               reject:(RCTPromiseRejectBlock)reject {
   FIRApp *firebaseApp = [RCTConvert firAppFromString:appName];
 
   // Use Swift factory — FirebaseFunctions is a pure-Swift SPM module,
   // cannot be imported directly from .mm files.
-  id functions =
-      [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
-                                    customUrlOrRegion:customUrlOrRegion
-                                         emulatorHost:emulatorHost
-                                         emulatorPort:(int)emulatorPort];
+  id functions = [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
+                                               customUrlOrRegion:customUrlOrRegion
+                                                    emulatorHost:emulatorHost
+                                                    emulatorPort:(int)emulatorPort];
 
   id callableData = data.data();
 
@@ -123,11 +119,9 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
   RNFBFunctionsCallHandler *handler = [[RNFBFunctionsCallHandler alloc] init];
 
   double timeoutValue = timeout.has_value() ? timeout.value() : 0;
-  std::optional<bool> limitedUseAppCheckToken =
-      options.limitedUseAppCheckTokens();
+  std::optional<bool> limitedUseAppCheckToken = options.limitedUseAppCheckTokens();
   NSNumber *limitedUseAppCheckTokenNumber =
-      limitedUseAppCheckToken.has_value() ? @(limitedUseAppCheckToken.value())
-                                          : @(NO);
+      limitedUseAppCheckToken.has_value() ? @(limitedUseAppCheckToken.value()) : @(NO);
 
   [handler callFunctionWithApp:firebaseApp
                      functions:functions
@@ -135,13 +129,11 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
                           data:callableData
                        timeout:timeoutValue
        limitedUseAppCheckToken:limitedUseAppCheckTokenNumber
-                    completion:^(NSDictionary *_Nullable result,
-                                 NSDictionary *_Nullable error) {
+                    completion:^(NSDictionary *_Nullable result, NSDictionary *_Nullable error) {
                       if (error) {
-                        NSMutableDictionary *userInfo = [NSMutableDictionary
-                            dictionaryWithDictionary:error];
-                        [RNFBSharedUtils rejectPromiseWithUserInfo:reject
-                                                          userInfo:userInfo];
+                        NSMutableDictionary *userInfo =
+                            [NSMutableDictionary dictionaryWithDictionary:error];
+                        [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:userInfo];
                       } else {
                         resolve(result);
                       }
@@ -153,19 +145,17 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
                 emulatorHost:(NSString *_Nullable)emulatorHost
                 emulatorPort:(double)emulatorPort
                          url:(NSString *)url
-                        data:(JS::NativeRNFBTurboFunctions::
-                                  SpecHttpsCallableFromUrlData &)data
-                     options:(JS::NativeRNFBTurboFunctions::
-                                  SpecHttpsCallableFromUrlOptions &)options
+                        data:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableFromUrlData &)data
+                     options:
+                         (JS::NativeRNFBTurboFunctions::SpecHttpsCallableFromUrlOptions &)options
                      resolve:(RCTPromiseResolveBlock)resolve
                       reject:(RCTPromiseRejectBlock)reject {
   FIRApp *firebaseApp = [RCTConvert firAppFromString:appName];
 
-  id functions =
-      [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
-                                    customUrlOrRegion:customUrlOrRegion
-                                         emulatorHost:emulatorHost
-                                         emulatorPort:(int)emulatorPort];
+  id functions = [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
+                                               customUrlOrRegion:customUrlOrRegion
+                                                    emulatorHost:emulatorHost
+                                                    emulatorPort:(int)emulatorPort];
 
   id callableData = data.data();
 
@@ -179,15 +169,13 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
   }
 
   std::optional<double> timeout = options.timeout();
-  std::optional<bool> limitedUseAppCheckToken =
-      options.limitedUseAppCheckTokens();
+  std::optional<bool> limitedUseAppCheckToken = options.limitedUseAppCheckTokens();
 
   RNFBFunctionsCallHandler *handler = [[RNFBFunctionsCallHandler alloc] init];
 
   double timeoutValue = timeout.has_value() ? timeout.value() : 0;
   NSNumber *limitedUseAppCheckTokenNumber =
-      limitedUseAppCheckToken.has_value() ? @(limitedUseAppCheckToken.value())
-                                          : @(NO);
+      limitedUseAppCheckToken.has_value() ? @(limitedUseAppCheckToken.value()) : @(NO);
 
   [handler
       callFunctionWithURLWithApp:firebaseApp
@@ -196,13 +184,11 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
                             data:callableData
                          timeout:timeoutValue
          limitedUseAppCheckToken:limitedUseAppCheckTokenNumber
-                      completion:^(NSDictionary *_Nullable result,
-                                   NSDictionary *_Nullable error) {
+                      completion:^(NSDictionary *_Nullable result, NSDictionary *_Nullable error) {
                         if (error) {
-                          NSMutableDictionary *userInfo = [NSMutableDictionary
-                              dictionaryWithDictionary:error];
-                          [RNFBSharedUtils rejectPromiseWithUserInfo:reject
-                                                            userInfo:userInfo];
+                          NSMutableDictionary *userInfo =
+                              [NSMutableDictionary dictionaryWithDictionary:error];
+                          [RNFBSharedUtils rejectPromiseWithUserInfo:reject userInfo:userInfo];
                         } else {
                           resolve(result);
                         }
@@ -217,10 +203,8 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
                emulatorHost:(NSString *_Nullable)emulatorHost
                emulatorPort:(double)emulatorPort
                        name:(NSString *)name
-                       data:(JS::NativeRNFBTurboFunctions::
-                                 SpecHttpsCallableStreamData &)data
-                    options:(JS::NativeRNFBTurboFunctions::
-                                 SpecHttpsCallableStreamOptions &)options
+                       data:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableStreamData &)data
+                    options:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableStreamOptions &)options
                  listenerId:(double)listenerId {
   [self streamSetup:appName
              region:customUrlOrRegion
@@ -239,11 +223,11 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
                   emulatorHost:(NSString *_Nullable)emulatorHost
                   emulatorPort:(double)emulatorPort
                            url:(NSString *)url
-                          data:(JS::NativeRNFBTurboFunctions::
-                                    SpecHttpsCallableStreamFromUrlData &)data
+                          data:(JS::NativeRNFBTurboFunctions::SpecHttpsCallableStreamFromUrlData &)
+                                   data
                        options:
-                           (JS::NativeRNFBTurboFunctions::
-                                SpecHttpsCallableStreamFromUrlOptions &)options
+                           (JS::NativeRNFBTurboFunctions::SpecHttpsCallableStreamFromUrlOptions &)
+                               options
                     listenerId:(double)listenerId {
   [self streamSetup:appName
              region:customUrlOrRegion
@@ -270,18 +254,16 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
   if (@available(iOS 15.0, macOS 12.0, *)) {
     FIRApp *firebaseApp = [RCTConvert firAppFromString:appName];
 
-    id functions =
-        [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
-                                      customUrlOrRegion:customUrlOrRegion
-                                           emulatorHost:emulatorHost
-                                           emulatorPort:(int)emulatorPort];
+    id functions = [RNFBFunctionsCallHandler createFunctionsForApp:firebaseApp
+                                                 customUrlOrRegion:customUrlOrRegion
+                                                      emulatorHost:emulatorHost
+                                                      emulatorPort:(int)emulatorPort];
 
     if (data == nil) {
       data = [NSNull null];
     }
 
-    RNFBFunctionsStreamHandler *handler =
-        [[RNFBFunctionsStreamHandler alloc] init];
+    RNFBFunctionsStreamHandler *handler = [[RNFBFunctionsStreamHandler alloc] init];
 
     double timeoutValue = timeout.has_value() ? timeout.value() : 0;
 
@@ -292,9 +274,8 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
         @"listenerId" : listenerIdNumber,
         @"body" : event
       };
-      [[RNFBRCTEventEmitter shared]
-          sendEventWithName:@"functions_streaming_event"
-                       body:normalisedEvent];
+      [[RNFBRCTEventEmitter shared] sendEventWithName:@"functions_streaming_event"
+                                                 body:normalisedEvent];
 
       // Remove handler when done
       if ([event[@"done"] boolValue]) {
@@ -335,8 +316,7 @@ RCT_EXPORT_MODULE(NativeRNFBTurboFunctions)
         @"done" : @NO
       }
     };
-    [[RNFBRCTEventEmitter shared] sendEventWithName:@"functions_streaming_event"
-                                               body:eventBody];
+    [[RNFBRCTEventEmitter shared] sendEventWithName:@"functions_streaming_event" body:eventBody];
   }
 }
 
