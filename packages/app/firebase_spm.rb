@@ -43,7 +43,7 @@ end
 #   Can be a single string like 'Firebase/Auth' or an array like ['Firebase/Messaging', 'FirebaseCoreExtension']
 def firebase_dependency(spec, version, spm_products, pods)
   if defined?(spm_dependency) && !defined?($RNFirebaseDisableSPM)
-    if defined?(Pod::UI)
+    if defined?(Pod) && defined?(Pod::UI)
       Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
         "Using SPM for Firebase dependency resolution (products: #{spm_products.join(', ')})"
     end
@@ -53,7 +53,7 @@ def firebase_dependency(spec, version, spm_products, pods)
       products: spm_products
     )
   else
-    if defined?(Pod::UI)
+    if defined?(Pod) && defined?(Pod::UI)
       if defined?($RNFirebaseDisableSPM)
         Pod::UI.puts "[react-native-firebase] #{spec.name}: ".yellow +
           "SPM disabled ($RNFirebaseDisableSPM = true), using CocoaPods for Firebase dependencies"

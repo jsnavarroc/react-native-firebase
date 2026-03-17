@@ -229,7 +229,8 @@ jobs:
             cd tests/ios
             sed -i '' "s/^linkage = 'dynamic'/linkage = 'static'/" Podfile
             sed -i '' "/^platform :ios/i\\
-            \$RNFirebaseDisableSPM = true" Podfile
+\$RNFirebaseDisableSPM = true
+" Podfile
             # Remove SWIFT_ENABLE_EXPLICIT_MODULES override (not needed without SPM)
             sed -i '' "/SWIFT_ENABLE_EXPLICIT_MODULES/d" Podfile
             echo "Podfile configured for CocoaPods-only mode"
