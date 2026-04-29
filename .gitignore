@@ -237,6 +237,8 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+# Exception: tarballs/ is a versioned folder for distributing prebuilt packages
+!tarballs/*.tgz
 
 # Yarn Integrity file
 .yarn-integrity
